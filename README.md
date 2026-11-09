@@ -2,7 +2,7 @@
   
   # BinSight
   
-  **BinSight** is an IoT-based smart waste monitoring system combining ESP32 sensor devices, an MQTT message broker, a FastAPI backend, MongoDB storage, and a Flutter application. It helps administrators and waste collection teams monitor bin fill levels, air-quality readings, fire indicators, device connectivity, and collection operations.
+  **BinSight** is an IoT-based smart waste monitoring system combining ESP32 sensor devices, a rechargeable battery, an MQTT message broker, a FastAPI backend, MongoDB storage, and a Flutter application. It helps administrators and waste collection teams monitor bin fill levels, air-quality readings, fire indicators, device connectivity, and collection operations.
 
 </div>
 
@@ -41,6 +41,27 @@ Its **objectives** are to:
 - When an ultrasonic reading is invalid, gas and fire readings can still be reported while the backend retains the last valid fill reading.
 
 <img width=auto height="600" alt="image" src="https://github.com/user-attachments/assets/8230ddd5-009b-4d9e-bd3f-8ff417c365b2" />
+
+### Battery-Powered Autonomous Operation
+
+- The ESP32-based monitoring device operates using 2 rechargeable OSELTECH 18650 lithium-ion batteries, enabling standalone operation without a continuous USB power connection.
+- Battery model: OSELTECH 3800 mAh 18650 Li-ion Rechargeable Battery.
+- Battery quantity: 2 cells.
+- Nominal voltage: 3.7 V per cell.
+- Rated capacity: 3800 mAh per cell.
+- The batteries power the device during autonomous monitoring and sensor operation.
+- Telemetry is transmitted through MQTT over Wi-Fi when network connectivity is available.
+
+**Battery specifications**
+| Parameter | Specification |
+|---|---|
+| Brand | OSELTECH |
+| Battery type | Rechargeable Li-ion |
+| Form factor | 18650 |
+| Number of cells | 2 |
+| Nominal voltage | 3.7 V per cell |
+| Rated capacity | 3800 mAh per cell |
+| Combined nominal energy | 28.12 Wh |
 
 ### Alerts and notifications
 
@@ -135,6 +156,7 @@ The ESP32 publishes a telemetry sample at startup and approximately every 2 minu
 | | HC-SR04 Ultrasonic Sensor | <img width=auto height="100" alt="Screenshot from 2026-10-11 13-58-34" src="https://github.com/user-attachments/assets/7fc33e09-d042-4484-984c-07d6ff300002"/> |
 | | MQ-135 Air Quality Sensor | <img width=auto height="100" alt="Screenshot from 2026-10-11 14-01-13" src="https://github.com/user-attachments/assets/4b9d1e39-e705-4121-8370-5607c96fa375"/> |
 | | KY-026 Flame Sensor | <img width=auto height="100" alt="Screenshot from 2026-10-11 14-06-58" src="https://github.com/user-attachments/assets/cf056ac5-7d15-4a05-a023-498a37a51b33"/> |
+| **Power Supply** | OSELTECH 18650 Rechargeable Li-ion Battery (3.7 V, 3800 mAh per cell) | <img width=auto height="100" alt="image" src="https://github.com/user-attachments/assets/bdeb7b31-ec27-4f4d-a77e-f36acdd8803c"/> |
 | **Firmware** | Arduino IDE/Framework | ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=flat&logo=arduino&logoColor=white) |
 | | PubSubClient | ![PubSubClient](https://img.shields.io/badge/PubSubClient-00979D?style=flat) |
 | **Mobile Application** | Flutter | ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white) |
@@ -195,7 +217,7 @@ Telemetry includes:
 - `fill_level`: fill percentage from 0 to 100 when a valid ultrasonic measurement is available.
 - `gas_level`: estimated MQ-135 concentration in PPM, accepted from 0 to 100,000.
 - `flame`: Boolean fire-sensor indication.
-- `battery_percent`: optional percentage for a device with a real battery monitor.
+- `battery_percent`: (FUTURE ADDITION) Percentage for a device with a real battery monitor.
 
 The current USB-powered firmware does not estimate battery percentage because USB input voltage does not indicate the remaining charge of a power bank.
 
@@ -264,7 +286,7 @@ Predictions depend on the quantity and quality of available telemetry. Sparse or
 ## Future Additions
 
 - **Waste-zone and dumping-room monitoring:** Add dedicated sensing for shared rooms, shafts, and larger dumping areas.
-- **Solar integration:** Add solar panels and improve charging and power management for greater device autonomy.
+- **Solar integration:** Add solar panels to improve charging and power management for greater device autonomy.
 - **More sensor types:** Expand monitoring with additional environmental or equipment sensors.
 - **Mobile app expansion:** Add richer mobile workflows and tools for administrators and collection workers.
 - **Advanced ML predictions:** Improve fill-level forecasts and anomaly detection using larger, deployment-specific datasets.
