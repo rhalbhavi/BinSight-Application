@@ -35,7 +35,7 @@ logger = logging.getLogger('binsight')
 MONGODB_URI = os.getenv('MONGODB_URI', '')
 MONGODB_DB = os.getenv('MONGODB_DB', 'binsight')
 PORT = int(os.getenv('PORT', '5000'))
-APP_BASE_URL = os.getenv('APP_BASE_URL', f'http://localhost:{PORT}')
+APP_BASE_URL = os.getenv('APP_BASE_URL', 'https://binsight-web.vercel.app')
 CORS_ORIGINS = [origin.strip() for origin in os.getenv('CORS_ORIGINS', '').split(',') if origin.strip()]
 MQTT_URL = os.getenv('MQTT_URL', '')
 MQTT_USERNAME = os.getenv('MQTT_USERNAME', '')
@@ -934,8 +934,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title='BinSight API', version='1.0.0', lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
-    allow_origin_regex=r'^https?://(localhost|127\.0\.0\.1)(:\d+)?$',
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],

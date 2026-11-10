@@ -50,9 +50,7 @@ class ApiService {
   );
   static final String _baseUrl = _configuredBaseUrl.isNotEmpty
       ? _configuredBaseUrl
-      : kIsWeb || defaultTargetPlatform != TargetPlatform.android
-      ? 'http://localhost:5000'
-      : 'http://10.0.2.2:5000';
+      : 'https://binsight-web.vercel.app';
 
   static Uri _uri(String path, {Map<String, String>? queryParameters}) {
     return Uri.parse('$_baseUrl$path').replace(
