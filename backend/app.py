@@ -966,11 +966,14 @@ async def mongo_error_handler(request: Request, exc: PyMongoError) -> JSONRespon
 
 
 @app.get('/')
+@app.get('/api')
+@app.get('/api/index.py')
 def root() -> dict[str, str]:
     return {'status': 'ok', 'service': 'BinSight API'}
 
 
 @app.get('/health')
+@app.get('/api/health')
 def health() -> dict[str, bool]:
     return {'ok': True}
 
