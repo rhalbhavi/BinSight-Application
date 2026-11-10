@@ -866,45 +866,55 @@ def create_mqtt_client(db: Any) -> mqtt.Client | None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if not MONGODB_URI:
-        raise RuntimeError('MONGODB_URI is required')
-    mongo_client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=10000, tz_aware=True)
-    try:
-        await asyncio.to_thread(mongo_client.admin.command, 'ping')
-    except Exception:
-        mongo_client.close()
-        logger.exception('Failed to connect to MongoDB')
-        raise
-    db = mongo_client[MONGODB_DB]
-    # Remove legacy persisted online notices. Reconnect notices now exist only
-    # as short-lived in-memory banners, never as Mongo notification records.
-    db.notifications.delete_many({
-        '$or': [
-            {'notification_type': {'$in': ['device_online', 'online']}},
-            {'notification_id': {'$regex': '^(device_online|online):'}},
-        ],
-    })
-    db.telemetry.create_index(
-        [('device_id', 1), ('received_at', 1)],
-        name='telemetry_device_received_at',
-    )
-    db.zones.create_index(
-        [('name', 1)],
-        unique=True,
-        collation=Collation(locale='en', strength=2),
-        name='zone_name_unique_case_insensitive',
-    )
+    mongo_uri = os.getenv('MONGODB_URI', '').strip()
+    mongo_db_name = os.getenv('MONGODB_DB', 'binsight').strip() or 'binsight'
+    mongo_client = None
+    db = None
+
+    if not mongo_uri:
+        logger.warning('MONGODB_URI environment variable is not set. Database operations will return 503.')
+    else:
+        try:
+            mongo_client = MongoClient(
+                mongo_uri,
+                serverSelectionTimeoutMS=5000,
+                connectTimeoutMS=5000,
+                socketTimeoutMS=10000,
+                tz_aware=True,
+            )
+            await asyncio.to_thread(mongo_client.admin.command, 'ping')
+            db = mongo_client[mongo_db_name]
+            logger.info('Connected to MongoDB database %s', mongo_db_name)
+        except Exception as e:
+            logger.warning('Could not connect to MongoDB at startup: %s. Continuing startup.', e)
+
     app.state.mongo_client = mongo_client
     app.state.db = db
     mqtt_client = None
     monitor_task = None
-    if not IS_SERVERLESS:
+
+    if db is not None and not IS_SERVERLESS:
+        try:
+            db.telemetry.create_index(
+                [('device_id', 1), ('received_at', 1)],
+                name='telemetry_device_received_at',
+            )
+            db.zones.create_index(
+                [('name', 1)],
+                unique=True,
+                collation=Collation(locale='en', strength=2),
+                name='zone_name_unique_case_insensitive',
+            )
+        except Exception:
+            logger.exception('Error ensuring indexes')
+
         mqtt_client = create_mqtt_client(db)
         monitor_task = asyncio.create_task(monitor_devices(db))
-    else:
+    elif IS_SERVERLESS:
         logger.info('Serverless runtime detected (Vercel); background MQTT loop and device monitor disabled.')
+
     app.state.mqtt_client = mqtt_client
-    logger.info('Connected to MongoDB database %s; telemetry writes target %s', MONGODB_DB, db.telemetry.full_name)
+
     try:
         yield
     finally:
@@ -917,7 +927,8 @@ async def lifespan(app: FastAPI):
         if mqtt_client is not None:
             mqtt_client.loop_stop()
             mqtt_client.disconnect()
-        mongo_client.close()
+        if mongo_client is not None:
+            mongo_client.close()
 
 
 app = FastAPI(title='BinSight API', version='1.0.0', lifespan=lifespan)
@@ -942,12 +953,17 @@ async def http_error_handler(request: Request, error: HTTPException) -> JSONResp
 
 
 def require_db_ready(db: Any) -> Any:
+    if db is None:
+        raise HTTPException(
+            status_code=503,
+            detail='Database connection not ready. Check MongoDB Atlas Network Access (allow 0.0.0.0/0) and MONGODB_URI in Vercel.',
+        )
     try:
         db.command('ping')
     except PyMongoError as exc:
         raise HTTPException(
             status_code=503,
-            detail='Database unavailable. Check MongoDB connectivity, Atlas access, and TLS/network settings.',
+            detail='Database unavailable. Check MongoDB connectivity, Atlas access (0.0.0.0/0), and TLS settings.',
         ) from exc
     return db
 
@@ -968,8 +984,26 @@ async def mongo_error_handler(request: Request, exc: PyMongoError) -> JSONRespon
 @app.get('/')
 @app.get('/api')
 @app.get('/api/index.py')
-def root() -> dict[str, str]:
-    return {'status': 'ok', 'service': 'BinSight API'}
+def root(request: Request) -> dict[str, Any]:
+    db = getattr(request.app.state, 'db', None)
+    db_connected = False
+    db_error = None
+    if db is not None:
+        try:
+            db.command('ping')
+            db_connected = True
+        except Exception as e:
+            db_error = str(e)
+    else:
+        db_error = 'db client is None (check Atlas 0.0.0.0/0 IP whitelist)'
+
+    return {
+        'status': 'ok',
+        'service': 'BinSight API',
+        'database_connected': db_connected,
+        'database_status': 'connected' if db_connected else db_error,
+        'serverless': IS_SERVERLESS,
+    }
 
 
 @app.get('/health')
