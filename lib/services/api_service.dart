@@ -666,8 +666,9 @@ class ApiService {
   }) async {
     final payload = <String, dynamic>{};
     if (name != null) payload['name'] = name;
-    if (locationDescription != null)
+    if (locationDescription != null) {
       payload['location_description'] = locationDescription;
+    }
     if (latitude != null) payload['latitude'] = latitude;
     if (longitude != null) payload['longitude'] = longitude;
     if (zoneId != null) payload['zone_id'] = zoneId;

@@ -25,6 +25,9 @@ from pymongo.collation import Collation
 from pymongo.errors import DuplicateKeyError, PyMongoError
 
 load_dotenv(Path(__file__).with_name('.env'))
+load_dotenv(Path(__file__).resolve().parent.parent / '.env')
+
+IS_SERVERLESS = os.getenv('VERCEL') is not None or os.getenv('AWS_LAMBDA_FUNCTION_NAME') is not None
 
 logging.basicConfig(level=os.getenv('LOG_LEVEL', 'INFO'))
 logger = logging.getLogger('binsight')
@@ -893,18 +896,24 @@ async def lifespan(app: FastAPI):
     )
     app.state.mongo_client = mongo_client
     app.state.db = db
-    mqtt_client = create_mqtt_client(db)
+    mqtt_client = None
+    monitor_task = None
+    if not IS_SERVERLESS:
+        mqtt_client = create_mqtt_client(db)
+        monitor_task = asyncio.create_task(monitor_devices(db))
+    else:
+        logger.info('Serverless runtime detected (Vercel); background MQTT loop and device monitor disabled.')
     app.state.mqtt_client = mqtt_client
-    monitor_task = asyncio.create_task(monitor_devices(db))
     logger.info('Connected to MongoDB database %s; telemetry writes target %s', MONGODB_DB, db.telemetry.full_name)
     try:
         yield
     finally:
-        monitor_task.cancel()
-        try:
-            await monitor_task
-        except asyncio.CancelledError:
-            pass
+        if monitor_task is not None:
+            monitor_task.cancel()
+            try:
+                await monitor_task
+            except asyncio.CancelledError:
+                pass
         if mqtt_client is not None:
             mqtt_client.loop_stop()
             mqtt_client.disconnect()
@@ -954,6 +963,11 @@ async def mongo_error_handler(request: Request, exc: PyMongoError) -> JSONRespon
         status_code=503,
         content={'error': 'Database unavailable. Check MongoDB connectivity, Atlas access, and TLS/network settings.'},
     )
+
+
+@app.get('/')
+def root() -> dict[str, str]:
+    return {'status': 'ok', 'service': 'BinSight API'}
 
 
 @app.get('/health')

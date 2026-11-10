@@ -629,8 +629,9 @@ class _SetupFlowScreenState extends State<SetupFlowScreen> {
   void _scheduleAdminEmailCheck(String value) {
     _adminEmailCheckDebounce?.cancel();
     final email = _normalizedEmail(value);
-    if (_registeredAdminEmail != null && _registeredAdminEmail != email)
+    if (_registeredAdminEmail != null && _registeredAdminEmail != email) {
       _registeredAdminEmail = null;
+    }
     if (_checkedAdminEmail != email) _checkedAdminEmail = null;
     if (email.isEmpty || !email.contains("@")) {
       _checkingAdminEmail = false;
@@ -703,13 +704,13 @@ class _SetupFlowScreenState extends State<SetupFlowScreen> {
           width: 2,
         ),
       ),
-      errorBorder: OutlineInputBorder(
+      errorBorder: const OutlineInputBorder(
         borderRadius: BorderRadius.zero,
-        borderSide: const BorderSide(color: Colors.red),
+        borderSide: BorderSide(color: Colors.red),
       ),
-      focusedErrorBorder: OutlineInputBorder(
+      focusedErrorBorder: const OutlineInputBorder(
         borderRadius: BorderRadius.zero,
-        borderSide: const BorderSide(color: Colors.red, width: 2),
+        borderSide: BorderSide(color: Colors.red, width: 2),
       ),
       hintText: hintText,
     );

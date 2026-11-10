@@ -203,8 +203,9 @@ class _LiveMapSectionState extends State<LiveMapSection> {
         return;
       }
       if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever)
+          permission == LocationPermission.deniedForever) {
         return;
+      }
 
       Position? currentPosition;
       try {

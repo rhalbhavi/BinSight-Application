@@ -220,11 +220,12 @@ class _WorkerNotificationOverlayState extends State<WorkerNotificationOverlay> {
             (item) => item['notification_id']?.toString() == bannerId,
           )) {
         _hideTimer?.cancel();
-        if (mounted)
+        if (mounted) {
           setState(() {
             _bannerMessage = null;
             _bannerNotificationId = null;
           });
+        }
       }
       // Do not replace an active banner or consume a transient event until
       // the current banner has had its full display time.
@@ -294,23 +295,24 @@ class _WorkerNotificationOverlayState extends State<WorkerNotificationOverlay> {
       setState(() {
         _bannerNotificationId = newestUnseen!['notification_id']?.toString();
         final message =
-            (newestUnseen!['message'] ??
+            (newestUnseen['message'] ??
                     "Your report '${newestUnseen['report_name'] ?? 'Issue Report'}' has been resolved by the admin.")
                 .toString();
         _bannerMessage = addDeviceNameToMessage(
           message,
-          newestUnseen!['device_id'] ??
+          newestUnseen['device_id'] ??
               newestUnseen['bin_id'] ??
               newestUnseen['zone_id'],
           _deviceNames,
         );
       });
       _hideTimer = Timer(const Duration(seconds: 5), () {
-        if (mounted)
+        if (mounted) {
           setState(() {
             _bannerMessage = null;
             _bannerNotificationId = null;
           });
+        }
       });
     } catch (_) {}
   }
@@ -347,7 +349,7 @@ class _WorkerNotificationOverlayState extends State<WorkerNotificationOverlay> {
                           child: Text(
                             _bannerMessage!,
                             style: GoogleFonts.titilliumWeb(
-                              color: Color(0xFF303030),
+                              color: const Color(0xFF303030),
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                             ),
@@ -617,8 +619,9 @@ class _WorkerDashboardState extends State<WorkerDashboard> {
 
   double _distanceToBin(Map<String, dynamic> device) {
     final location = _locationFromDevice(device);
-    if (location == null || _currentUserLocation == null)
+    if (location == null || _currentUserLocation == null) {
       return double.infinity;
+    }
     return const Distance().as(
       LengthUnit.Meter,
       _currentUserLocation!,
@@ -1069,11 +1072,12 @@ class _TasksScreenState extends State<TasksScreen> {
         _loading = false;
       });
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _error = error.toString();
           _loading = false;
         });
+      }
     }
   }
 
@@ -1373,10 +1377,11 @@ class _WorkerAlertsScreenState extends State<AlertsScreen> {
       await ApiService.resolveDeviceAlerts(binId);
       await _loadAlerts();
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Could not resolve alert: $error')),
         );
+      }
     }
   }
 
@@ -1578,10 +1583,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       await ApiService.deleteNotification(notificationId);
       await _loadNotifications();
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Could not resolve notification: $error')),
         );
+      }
     } finally {
       if (mounted) setState(() => _resolvingNotificationId = null);
     }
@@ -2292,8 +2298,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         .trim();
                                 if (phone.isEmpty) return;
                                 final uri = Uri(scheme: 'tel', path: phone);
-                                if (await canLaunchUrl(uri))
+                                if (await canLaunchUrl(uri)) {
                                   await launchUrl(uri);
+                                }
                               },
                               child: _contactInfoRow(
                                 Icons.phone_outlined,
@@ -2809,7 +2816,7 @@ class StatusCard extends StatelessWidget {
                     ),
                     _metricInfo(
                       '$gasLabel: ',
-                      '${aqi} PPM ($gasStatus)',
+                      '$aqi PPM ($gasStatus)',
                       gasColor,
                       Icons.cloud_outlined,
                     ),

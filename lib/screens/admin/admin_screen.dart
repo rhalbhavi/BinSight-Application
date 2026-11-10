@@ -230,8 +230,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   double _distanceToBin(Map<String, dynamic> device) {
     final location = _locationFromDevice(device);
-    if (location == null || _currentUserLocation == null)
+    if (location == null || _currentUserLocation == null) {
       return double.infinity;
+    }
     return const Distance().as(
       LengthUnit.Meter,
       _currentUserLocation!,
@@ -997,9 +998,9 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
         const Divider(height: 1, thickness: 1),
         const SizedBox(height: 12),
         if (items.isEmpty)
-          Card(
+          const Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: Text('No items assigned yet.'),
             ),
           )
@@ -1930,10 +1931,11 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> {
       await ApiService.deleteNotification(notificationId);
       await _loadNotifications();
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Could not resolve notification: $error')),
         );
+      }
     } finally {
       if (mounted) setState(() => _resolvingNotificationId = null);
     }
@@ -2058,10 +2060,11 @@ class _AlertsScreenState extends State<AlertsScreen> {
       await ApiService.resolveDeviceAlerts(binId);
       await _loadAlerts();
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Could not resolve alert: $error')),
         );
+      }
     }
   }
 
@@ -2844,11 +2847,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadPreferences() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _loading = false;
           _error = 'Sign in to manage settings.';
         });
+      }
       return;
     }
     try {
@@ -3512,7 +3516,7 @@ class StatusCard extends StatelessWidget {
                     ),
                     _metricInfo(
                       '$gasLabel: ',
-                      '${aqi} PPM ($gasStatus)',
+                      '$aqi PPM ($gasStatus)',
                       gasColor,
                       Icons.cloud_outlined,
                     ),
@@ -3762,8 +3766,9 @@ class _AddWorkerScreenState extends State<AddWorkerScreen> {
         password: _password.text,
       );
       createdUser = credential.user;
-      if (createdUser == null)
+      if (createdUser == null) {
         throw Exception('Firebase did not create the worker account.');
+      }
 
       var photoUrl = '';
       if (_photoBytes != null) {
@@ -3796,10 +3801,11 @@ class _AddWorkerScreenState extends State<AddWorkerScreen> {
           await FirebaseAuth.instanceFor(app: workerApp).currentUser?.delete();
         } catch (_) {}
       }
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Could not add worker: $error')));
+      }
     } finally {
       if (workerApp != null) {
         try {
@@ -3985,7 +3991,7 @@ class WorkerProfileScreen extends StatefulWidget {
 class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
   final ImagePicker _picker = ImagePicker();
   late Map<String, dynamic> _workerData;
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
