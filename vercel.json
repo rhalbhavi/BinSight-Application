@@ -1,80 +1,23 @@
 {
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/health",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/setup/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/devices/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/devices",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/workers/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/workers",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/admins/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/zones/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/zones",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/alerts/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/alerts",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/reports/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/reports",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/config",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/contact-admin",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/users/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/images/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/analytics/(.*)",
-      "destination": "/api/index.py"
-    }
+    { "source": "/health", "destination": "/api/index.py" },
+    { "source": "/api/health", "destination": "/api/index.py" },
+    { "source": "/setup/:path*", "destination": "/api/index.py" },
+    { "source": "/devices/:path*", "destination": "/api/index.py" },
+    { "source": "/bins/:path*", "destination": "/api/index.py" },
+    { "source": "/workers/:path*", "destination": "/api/index.py" },
+    { "source": "/admins/:path*", "destination": "/api/index.py" },
+    { "source": "/zones/:path*", "destination": "/api/index.py" },
+    { "source": "/alerts/:path*", "destination": "/api/index.py" },
+    { "source": "/reports/:path*", "destination": "/api/index.py" },
+    { "source": "/config", "destination": "/api/index.py" },
+    { "source": "/contact-admin", "destination": "/api/index.py" },
+    { "source": "/users/:path*", "destination": "/api/index.py" },
+    { "source": "/images/:path*", "destination": "/api/index.py" },
+    { "source": "/upload/:path*", "destination": "/api/index.py" },
+    { "source": "/analytics/:path*", "destination": "/api/index.py" },
+    { "source": "/tasks/:path*", "destination": "/api/index.py" },
+    { "source": "/notifications/:path*", "destination": "/api/index.py" },
+    { "source": "/((?!.*\\.(?:js|css|png|jpg|jpeg|gif|ico|svg|wasm|json|ttf|woff|woff2|map|br|gz)$).*)", "destination": "/index.html" }
   ]
 }
