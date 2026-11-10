@@ -1,7 +1,79 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/health",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/setup/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/devices/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/devices",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/workers/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/workers",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/admins/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/zones/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/zones",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/alerts/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/alerts",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/reports/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/reports",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/config",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/contact-admin",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/users/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/analytics/(.*)",
       "destination": "/api/index.py"
     }
   ]
