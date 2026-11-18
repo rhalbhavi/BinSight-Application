@@ -980,9 +980,9 @@ async def mongo_error_handler(request: Request, exc: PyMongoError) -> JSONRespon
     )
 
 
-@app.get('/')
 @app.get('/api')
 @app.get('/api/index.py')
+@app.get('/api/status')
 def root(request: Request) -> dict[str, Any]:
     db = getattr(request.app.state, 'db', None)
     db_connected = False

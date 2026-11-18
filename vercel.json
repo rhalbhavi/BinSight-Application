@@ -1,7 +1,10 @@
 {
+  "outputDirectory": "public",
   "rewrites": [
     { "source": "/health", "destination": "/api/index.py" },
     { "source": "/api/health", "destination": "/api/index.py" },
+    { "source": "/api/status", "destination": "/api/index.py" },
+    { "source": "/api", "destination": "/api/index.py" },
     { "source": "/setup/:path*", "destination": "/api/index.py" },
     { "source": "/devices/:path*", "destination": "/api/index.py" },
     { "source": "/bins/:path*", "destination": "/api/index.py" },
