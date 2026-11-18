@@ -13,7 +13,7 @@
 Shared waste collection areas in apartment complexes, institutions, industrial parks, and other public spaces often face garbage overflow, delayed disposal, and safety risks such as gas buildup or fire hazards due to a lack of real-time monitoring.
 
 <div align="center">
-  <img width=auto height="300" alt="Screenshot from 2026-10-11 15-09-26" src="https://github.com/user-attachments/assets/b646dc3b-6a02-40bb-9a37-41406f6ab7d7"/>
+  <img width=auto height="310" alt="Screenshot from 2026-10-11 15-09-26" src="https://github.com/user-attachments/assets/b646dc3b-6a02-40bb-9a37-41406f6ab7d7"/>
 </div>
 
 <p></p>
@@ -39,8 +39,9 @@ Its **objectives** are to:
 - A device heartbeat and MQTT last-will status help identify whether devices are online or offline.
 - The backend validates incoming measurements, stores accepted telemetry, and updates the current bin status.
 - When an ultrasonic reading is invalid, gas and fire readings can still be reported while the backend retains the last valid fill reading.
-
-<img width=auto height="600" alt="image" src="https://github.com/user-attachments/assets/8230ddd5-009b-4d9e-bd3f-8ff417c365b2" />
+<div align="center">
+<img width=auto height="610" alt="image" src="https://github.com/user-attachments/assets/8230ddd5-009b-4d9e-bd3f-8ff417c365b2" />
+</div>
 
 ### Battery-Powered Autonomous Operation
 
@@ -69,29 +70,47 @@ Its **objectives** are to:
 - Open alerts can be reviewed and resolved in the application.
 - The application also supports operational notifications for reports, task updates, connectivity events, and critical reminders.
 - Dashboards periodically refresh device data; notifications are application-level, not a guarantee of SMS or push delivery.
+<div align="center">
+  <img width="727" height="201" alt="Screenshot from 2026-11-15 22-03-21" src="https://github.com/user-attachments/assets/558443df-a7bf-421b-83ca-35fa2c059edb" />
+  <img width="650" height=auto alt="image" src="https://github.com/user-attachments/assets/0e763e53-0ede-4fb7-aba8-b2bac9f0a85c" />
+</div>
 
-<img width="979" height="454" alt="Screenshot from 2026-10-11 14-55-54" src="https://github.com/user-attachments/assets/e13db645-95ac-4ec6-a179-55305762f702" />
+### Administrator Setup and User Login Screen
 
-### Administration and worker operations
+- Intuitive setup process/UI for configuring organization details, adding worker accounts, and registering devices via QR scanning.
+- Login screen with role-based access control.
+<div align="center">
+  <img width="500" height=auto alt="Screenshot from 2026-11-15 20-27-43" src="https://github.com/user-attachments/assets/b4bece87-33e6-4590-a16c-de06e8b3231c" />
+  <img width="500" height=auto alt="Screenshot from 2026-11-15 20-34-27" src="https://github.com/user-attachments/assets/900c631b-bfe2-48d5-98bc-5f164a80a77d" />
+</div>
+
+### Administration and Worker Operations
 
 - Role-based application experiences for administrators and workers.
 - Initial organization setup for an administrator, workers, bins, and zones.
-- Bin and zone registration, including QR-based device registration.
+- Bin and zone registration and management, including QR-based device registration.
 - Worker profiles, assignments, and task status updates.
 - Issue reporting with optional photos and administrator report resolution.
 - Configurable notification preferences and profile pictures.
+<div align="center">
+  <img width="290" height=auto alt="Screenshot from 2026-11-15 20-41-54" src="https://github.com/user-attachments/assets/61d66d41-94f6-4ab1-b1e0-2bcce3d75e29" />
+  <br>
+  <img width="800" height=auto alt="image" src="https://github.com/user-attachments/assets/9f285b84-a025-4377-beb9-bc922f140283" />
+  <img width="800" height=auto alt="image" src="https://github.com/user-attachments/assets/4fd229d5-c195-4243-b6a5-29c51f71abb2" />
+  <img width="700" height=auto alt="image" src="https://github.com/user-attachments/assets/65faf587-4baf-4170-889d-34c5aab106a2" />
+  <img width="700" height=auto alt="Screenshot from 2026-11-15 21-12-41" src="https://github.com/user-attachments/assets/8aedabd7-6dbf-4d80-9948-098d7525d6af" />
+  <img width="700" height=auto alt="Screenshot from 2026-11-15 21-00-41" src="https://github.com/user-attachments/assets/1db5ef08-30e7-4d5c-84c5-22089be4bc3a" />
+</div>
 
-<img width=auto height="350" alt="image" src="https://github.com/user-attachments/assets/9f285b84-a025-4377-beb9-bc922f140283" />
-<img width=auto height="400" alt="image" src="https://github.com/user-attachments/assets/fbadf41a-b279-4041-9353-26cd0659645a" />
-<img width=auto height="500" alt="image" src="https://github.com/user-attachments/assets/bd1ec377-f8f4-4a7d-a573-a0f38a950e87" />
-
-### Maps and location
+### Maps and Location
 
 - Map views can show bins, zones, and worker locations when location information is available.
 - Bin records can include coordinates and location descriptions.
 - Map tiles are provided by OpenStreetMap; map display requires network access.
-
-<img width=auto height="200" alt="image" src="https://github.com/user-attachments/assets/f10079b0-0c06-4680-a542-cad8c7272194" />
+<div align="center">
+  <img width=auto height="530" alt="Screenshot from 2026-11-15 21-04-21" src="https://github.com/user-attachments/assets/98bda37c-4f56-4bcd-a605-08a8e8f6458a" />
+  <img width=auto height="280" alt="image" src="https://github.com/user-attachments/assets/f10079b0-0c06-4680-a542-cad8c7272194" />
+</div>
 
 ### Analytics
 
@@ -99,8 +118,10 @@ Its **objectives** are to:
 - The backend groups valid fill measurements into hourly history.
 - Overflow forecasts use an ARIMA model when enough history is available, with a recent-rate fallback for sparse data.
 - Gas-spike and fire-risk indicators are estimated from recent telemetry. Predictions are indicative and should not replace sensor validation or safety procedures.
-
-<img width=auto height="600" alt="image (1)" src="https://github.com/user-attachments/assets/44e938fe-5da8-4d19-aaf2-6e7027dfbb06" />
+<div align="center">
+  <img width=auto height="680" alt="image (1)" src="https://github.com/user-attachments/assets/44e938fe-5da8-4d19-aaf2-6e7027dfbb06" />
+  <img width=auto height="360" alt="Screenshot from 2026-11-15 22-21-31" src="https://github.com/user-attachments/assets/d038f8f4-81da-448a-b475-fc8460d0d7bd" />
+</div>
 
 ----
 
@@ -153,10 +174,10 @@ The ESP32 publishes a telemetry sample at startup and approximately every 2 minu
 | Category | Technology | Image / Badge |
 |---|---|---|
 | **IoT Hardware** | ESP32 Development Board | <img width=auto height="100" alt="Screenshot from 2026-10-11 14-03-31" src="https://github.com/user-attachments/assets/70988967-a575-4721-bb1a-ea0ba962be2e"/> |
-| | HC-SR04 Ultrasonic Sensor | <img width=auto height="100" alt="Screenshot from 2026-10-11 13-58-34" src="https://github.com/user-attachments/assets/7fc33e09-d042-4484-984c-07d6ff300002"/> |
-| | MQ-135 Air Quality Sensor | <img width=auto height="100" alt="Screenshot from 2026-10-11 14-01-13" src="https://github.com/user-attachments/assets/4b9d1e39-e705-4121-8370-5607c96fa375"/> |
-| | KY-026 Flame Sensor | <img width=auto height="100" alt="Screenshot from 2026-10-11 14-06-58" src="https://github.com/user-attachments/assets/cf056ac5-7d15-4a05-a023-498a37a51b33"/> |
-| **Power Supply** | OSELTECH 18650 Rechargeable Li-ion Battery (3.7 V, 3800 mAh per cell) | <img width=auto height="100" alt="image" src="https://github.com/user-attachments/assets/bdeb7b31-ec27-4f4d-a77e-f36acdd8803c"/> |
+| | HC-SR04 Ultrasonic Sensor | <div align="center"><img width=auto height="100" alt="Screenshot from 2026-10-11 13-58-34" src="https://github.com/user-attachments/assets/7fc33e09-d042-4484-984c-07d6ff300002"/></div> |
+| | MQ-135 Air Quality Sensor | <div align="center"><img width=auto height="100" alt="Screenshot from 2026-10-11 14-01-13" src="https://github.com/user-attachments/assets/4b9d1e39-e705-4121-8370-5607c96fa375"/></div> |
+| | KY-026 Flame Sensor | <div align="center"><img width=auto height="100" alt="Screenshot from 2026-10-11 14-06-58" src="https://github.com/user-attachments/assets/cf056ac5-7d15-4a05-a023-498a37a51b33"/></div> |
+| **Power Supply** | OSELTECH 18650 Rechargeable Li-ion Battery (3.7 V, 3800 mAh per cell) | <div align="center"><img width=auto height="100" alt="image" src="https://github.com/user-attachments/assets/bdeb7b31-ec27-4f4d-a77e-f36acdd8803c"/></div> |
 | **Firmware** | Arduino IDE/Framework | ![Arduino](https://img.shields.io/badge/Arduino-00979D?style=flat&logo=arduino&logoColor=white) |
 | | PubSubClient | ![PubSubClient](https://img.shields.io/badge/PubSubClient-00979D?style=flat) |
 | **Mobile Application** | Flutter | ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white) |
