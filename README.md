@@ -13,7 +13,7 @@
 Shared waste collection areas in apartment complexes, institutions, industrial parks, and other public spaces often face garbage overflow, delayed disposal, and safety risks such as gas buildup or fire hazards due to a lack of real-time monitoring.
 
 <div align="center">
-  <img width=auto height="310" alt="Screenshot from 2026-10-11 15-09-26" src="https://github.com/user-attachments/assets/b646dc3b-6a02-40bb-9a37-41406f6ab7d7"/>
+  <img width=auto height="340" alt="Screenshot from 2026-10-11 15-09-26" src="https://github.com/user-attachments/assets/b646dc3b-6a02-40bb-9a37-41406f6ab7d7"/>
 </div>
 
 <p></p>
@@ -64,17 +64,6 @@ Its **objectives** are to:
 | Rated capacity | 3800 mAh per cell |
 | Combined nominal energy | 28.12 Wh |
 
-### Alerts and notifications
-
-- The backend evaluates readings against configurable thresholds and records sensor alert transitions.
-- Open alerts can be reviewed and resolved in the application.
-- The application also supports operational notifications for reports, task updates, connectivity events, and critical reminders.
-- Dashboards periodically refresh device data; notifications are application-level, not a guarantee of SMS or push delivery.
-<div align="center">
-  <img width="727" height="201" alt="Screenshot from 2026-11-15 22-03-21" src="https://github.com/user-attachments/assets/558443df-a7bf-421b-83ca-35fa2c059edb" />
-  <img width="650" height=auto alt="image" src="https://github.com/user-attachments/assets/0e763e53-0ede-4fb7-aba8-b2bac9f0a85c" />
-</div>
-
 ### Administrator Setup and User Login Screen
 
 - Intuitive setup process/UI for configuring organization details, adding worker accounts, and registering devices via QR scanning.
@@ -110,6 +99,17 @@ Its **objectives** are to:
 <div align="center">
   <img width=auto height="530" alt="Screenshot from 2026-11-15 21-04-21" src="https://github.com/user-attachments/assets/98bda37c-4f56-4bcd-a605-08a8e8f6458a" />
   <img width=auto height="280" alt="image" src="https://github.com/user-attachments/assets/f10079b0-0c06-4680-a542-cad8c7272194" />
+</div>
+
+### Alerts and Notifications
+
+- The backend evaluates readings against configurable thresholds and records sensor alert transitions.
+- Open alerts can be reviewed and resolved in the application.
+- The application also supports operational notifications for reports, task updates, connectivity events, and critical reminders.
+- Dashboards periodically refresh device data; notifications are application-level, not a guarantee of SMS or push delivery.
+<div align="center">
+  <img width="727" height="201" alt="Screenshot from 2026-11-15 22-03-21" src="https://github.com/user-attachments/assets/558443df-a7bf-421b-83ca-35fa2c059edb" />
+  <img width="650" height=auto alt="image" src="https://github.com/user-attachments/assets/0e763e53-0ede-4fb7-aba8-b2bac9f0a85c" />
 </div>
 
 ### Analytics
