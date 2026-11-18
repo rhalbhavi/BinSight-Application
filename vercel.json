@@ -1,5 +1,4 @@
 {
-  "outputDirectory": "public",
   "rewrites": [
     { "source": "/health", "destination": "/api/index.py" },
     { "source": "/api/health", "destination": "/api/index.py" },
@@ -20,7 +19,6 @@
     { "source": "/upload/:path*", "destination": "/api/index.py" },
     { "source": "/analytics/:path*", "destination": "/api/index.py" },
     { "source": "/tasks/:path*", "destination": "/api/index.py" },
-    { "source": "/notifications/:path*", "destination": "/api/index.py" },
-    { "source": "/((?!.*\\.(?:js|css|png|jpg|jpeg|gif|ico|svg|wasm|json|ttf|woff|woff2|map|br|gz)$).*)", "destination": "/index.html" }
+    { "source": "/notifications/:path*", "destination": "/api/index.py" }
   ]
 }
