@@ -981,7 +981,14 @@ async def mongo_error_handler(request: Request, exc: PyMongoError) -> JSONRespon
     )
 
 
-PUBLIC_DIR = Path(__file__).resolve().parent.parent / 'public'
+# Locate public directory across local and serverless (Vercel Lambda) runtimes
+_public_candidates = [
+    Path(__file__).resolve().parent / 'public',
+    Path(__file__).resolve().parent.parent / 'public',
+    Path.cwd() / 'public',
+    Path('/var/task/public'),
+]
+PUBLIC_DIR = next((p for p in _public_candidates if p.is_dir()), _public_candidates[1])
 INDEX_FILE = PUBLIC_DIR / 'index.html'
 
 
@@ -990,11 +997,14 @@ INDEX_FILE = PUBLIC_DIR / 'index.html'
 def serve_index():
     if INDEX_FILE.is_file():
         return FileResponse(INDEX_FILE)
+    # Debug info if index.html is unexpectedly not found
     return {
-        'status': 'ok',
-        'service': 'BinSight API',
-        'database_connected': True,
-        'serverless': IS_SERVERLESS,
+        'status': 'error',
+        'message': 'index.html not found',
+        'checked_dir': str(PUBLIC_DIR),
+        'exists': PUBLIC_DIR.is_dir(),
+        'cwd': str(Path.cwd()),
+        'file': str(Path(__file__).resolve()),
     }
 
 
