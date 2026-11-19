@@ -1038,12 +1038,14 @@ def root(request: Request) -> dict[str, Any]:
     else:
         db_error = 'db client is None (check Atlas 0.0.0.0/0 IP whitelist)'
 
+    files_in_task = os.listdir('/var/task') if os.path.exists('/var/task') else []
     return {
         'status': 'ok',
         'service': 'BinSight API',
         'database_connected': db_connected,
         'database_status': 'connected' if db_connected else db_error,
         'serverless': IS_SERVERLESS,
+        'task_files': files_in_task,
     }
 
 
