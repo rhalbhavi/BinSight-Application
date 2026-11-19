@@ -932,7 +932,36 @@ async def lifespan(app: FastAPI):
             mongo_client.close()
 
 
+from urllib.parse import parse_qs, urlencode
+
+
+class VercelRouteMiddleware:
+    """ASGI middleware to restore original request paths when rewritten by Vercel."""
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope['type'] == 'http':
+            query_string = scope.get('query_string', b'').decode('utf-8')
+            if '__route__' in query_string:
+                params = parse_qs(query_string, keep_blank_values=True)
+                routes = params.pop('__route__', None)
+                if routes and routes[0]:
+                    target_path = routes[0]
+                    if len(target_path) > 1:
+                        target_path = target_path.rstrip('/')
+                    scope['path'] = target_path
+                    scope['raw_path'] = target_path.encode('utf-8')
+                clean_pairs = []
+                for k, vals in params.items():
+                    for v in vals:
+                        clean_pairs.append((k, v))
+                scope['query_string'] = urlencode(clean_pairs).encode('utf-8')
+        await self.app(scope, receive, send)
+
+
 app = FastAPI(title='BinSight API', version='1.0.0', lifespan=lifespan)
+app.add_middleware(VercelRouteMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
@@ -1023,7 +1052,6 @@ def serve_index():
 
 
 @app.get('/api')
-@app.get('/api/index.py')
 @app.get('/api/status')
 def root(request: Request) -> dict[str, Any]:
     db = getattr(request.app.state, 'db', None)
@@ -1038,18 +1066,12 @@ def root(request: Request) -> dict[str, Any]:
     else:
         db_error = 'db client is None (check Atlas 0.0.0.0/0 IP whitelist)'
 
-    files_in_task = os.listdir('/var/task') if os.path.exists('/var/task') else []
     return {
         'status': 'ok',
         'service': 'BinSight API',
         'database_connected': db_connected,
         'database_status': 'connected' if db_connected else db_error,
         'serverless': IS_SERVERLESS,
-        'task_files': files_in_task,
-        'debug_path': request.url.path,
-        'debug_scope_path': request.scope.get('path'),
-        'debug_matched_path': request.headers.get('x-matched-path'),
-        'debug_headers': dict(request.headers),
     }
 
 
