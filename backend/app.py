@@ -19,7 +19,8 @@ from bson import Binary
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, Response
+from fastapi.staticfiles import StaticFiles
 from pymongo import MongoClient, ReturnDocument
 from pymongo.collation import Collation
 from pymongo.errors import DuplicateKeyError, PyMongoError
@@ -978,6 +979,23 @@ async def mongo_error_handler(request: Request, exc: PyMongoError) -> JSONRespon
         status_code=503,
         content={'error': 'Database unavailable. Check MongoDB connectivity, Atlas access, and TLS/network settings.'},
     )
+
+
+PUBLIC_DIR = Path(__file__).resolve().parent.parent / 'public'
+INDEX_FILE = PUBLIC_DIR / 'index.html'
+
+
+@app.get('/')
+@app.get('/index.html')
+def serve_index():
+    if INDEX_FILE.is_file():
+        return FileResponse(INDEX_FILE)
+    return {
+        'status': 'ok',
+        'service': 'BinSight API',
+        'database_connected': True,
+        'serverless': IS_SERVERLESS,
+    }
 
 
 @app.get('/api')
@@ -2201,6 +2219,24 @@ async def complete_setup(request: Request) -> dict[str, bool]:
         upsert=True,
     )
     return {'ok': True}
+
+
+# Mount static subdirectories if they exist (assets, canvaskit, icons)
+if PUBLIC_DIR.is_dir():
+    for sub in ('assets', 'canvaskit', 'icons'):
+        sub_dir = PUBLIC_DIR / sub
+        if sub_dir.is_dir():
+            app.mount(f'/{sub}', StaticFiles(directory=sub_dir), name=sub)
+
+
+@app.get('/{full_path:path}')
+async def serve_spa_or_static(full_path: str):
+    file_path = PUBLIC_DIR / full_path
+    if file_path.is_file():
+        return FileResponse(file_path)
+    if INDEX_FILE.is_file():
+        return FileResponse(INDEX_FILE)
+    raise HTTPException(status_code=404, detail='Not Found')
 
 
 if __name__ == '__main__':

@@ -92,15 +92,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       print('Attempting Google sign-in...');
-      // Always sign out before attempting to sign in, to ensure the Google account
-      // selection popup is displayed.
-      await FirebaseAuth.instance.signOut();
 
       if (kIsWeb) {
+        // On web: do NOT await signOut() before signInWithPopup.
+        // Chrome's popup blocker only allows popups in direct response to a
+        // user gesture. Any awaited async call in between breaks that chain
+        // and the popup is silently blocked (closes immediately, no error).
+        // We use 'prompt: select_account' to force account picker instead.
         final provider = GoogleAuthProvider()..setCustomParameters({'prompt': 'select_account'});
         print('Web: Calling signInWithPopup...');
         await FirebaseAuth.instance.signInWithPopup(provider);
       } else {
+        // On mobile: safe to sign out first (no popup involved).
+        await FirebaseAuth.instance.signOut();
         print('Mobile: Initializing GoogleSignIn...');
         final googleSignIn = GoogleSignIn();
         try {
@@ -157,15 +161,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
+      print('FirebaseAuthException during Google login: ${e.code} ${e.message}');
       setState(() {
-        print('FirebaseAuthException during Google login: $e');
-        error = incorrectCredentialsMessage;
+        error = e.message ?? incorrectCredentialsMessage;
       });
     } catch (e) {
       if (!mounted) return;
+      print('Generic error during Google login: $e');
       setState(() {
-        print('Generic error during Google login: $e');
-        error = incorrectCredentialsMessage;
+        error = e.toString();
       });
     }
 
