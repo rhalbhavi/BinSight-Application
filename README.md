@@ -2,6 +2,8 @@
   
   # BinSight
   
+  <img width="1033" height="232" alt="Screenshot from 2026-11-18 20-56-52" src="https://github.com/user-attachments/assets/0e4bd2f9-e8e5-4a2d-a4f0-57c119e331fc"/><br>
+
   **BinSight** is an IoT-based smart waste monitoring system combining ESP32 sensor devices, a rechargeable battery, an MQTT message broker, a FastAPI backend, MongoDB storage, and a Flutter application. It helps administrators and waste collection teams monitor bin fill levels, air-quality readings, fire indicators, device connectivity, and collection operations.
 
 </div>
