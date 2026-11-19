@@ -1119,7 +1119,9 @@ def user_role(uid: str, request: Request, email: str = '') -> dict[str, Any]:
         query = {'email': {'$regex': f'^{re.escape(email.strip())}$', '$options': 'i'}}
         admin = db.admins.find_one(query)
         if admin:
-            db.admins.update_one({'_id': admin['_id']}, {'$set': {'admin_id': uid, 'updated_at': datetime.now(timezone.utc)}})
+            now_dt = datetime.now(timezone.utc)
+            db.admins.update_one({'_id': admin['_id']}, {'$set': {'admin_id': uid, 'updated_at': now_dt}})
+            db.app_config.update_one({'_id': 'main'}, {'$set': {'admin_uid': uid, 'updated_at': now_dt}})
             return {'role': 'admin'}
         worker = db.workers.find_one(query)
         if worker:
