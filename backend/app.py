@@ -1046,6 +1046,10 @@ def root(request: Request) -> dict[str, Any]:
         'database_status': 'connected' if db_connected else db_error,
         'serverless': IS_SERVERLESS,
         'task_files': files_in_task,
+        'debug_path': request.url.path,
+        'debug_scope_path': request.scope.get('path'),
+        'debug_matched_path': request.headers.get('x-matched-path'),
+        'debug_headers': dict(request.headers),
     }
 
 
