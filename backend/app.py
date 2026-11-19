@@ -992,17 +992,31 @@ PUBLIC_DIR = next((p for p in _public_candidates if p.is_dir()), _public_candida
 INDEX_FILE = PUBLIC_DIR / 'index.html'
 
 
+# Locate index.html across local and serverless runtimes
+def _find_index_file() -> Path | None:
+    candidates = [
+        INDEX_FILE,
+        Path(__file__).resolve().parent / 'index.html',
+        Path.cwd() / 'index.html',
+        Path('/var/task/index.html'),
+        Path('/var/task/public/index.html'),
+    ]
+    for c in candidates:
+        if c.is_file():
+            return c
+    return None
+
+
 @app.get('/')
 @app.get('/index.html')
 def serve_index():
-    if INDEX_FILE.is_file():
-        return FileResponse(INDEX_FILE)
-    # Debug info if index.html is unexpectedly not found
+    found = _find_index_file()
+    if found:
+        return FileResponse(found)
     return {
         'status': 'error',
         'message': 'index.html not found',
         'checked_dir': str(PUBLIC_DIR),
-        'exists': PUBLIC_DIR.is_dir(),
         'cwd': str(Path.cwd()),
         'file': str(Path(__file__).resolve()),
     }
