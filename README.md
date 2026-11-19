@@ -143,6 +143,10 @@ The system can help:
 
 ## System Architecture
 
+<div align="center">
+<img width=auto height="600" alt="Screenshot from 2026-11-15 16-14-00" src="https://github.com/user-attachments/assets/8b3ea6b4-052f-45b0-bc3a-dd1886b95a33" />
+</div>
+
 ```text
 ESP32 sensors
     │
