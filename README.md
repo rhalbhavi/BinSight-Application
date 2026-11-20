@@ -146,7 +146,7 @@ The system can help:
 
 <div align="center">
 <img width=auto height="600" alt="Screenshot from 2026-11-15 16-14-00" src="https://github.com/user-attachments/assets/8b3ea6b4-052f-45b0-bc3a-dd1886b95a33" />
-</div>
+</div><br>
 
 The ESP32 publishes a telemetry sample at startup and approximately every 2 minutes while connected. It sends a retained connection heartbeat every 2 seconds. The backend considers a device offline when no heartbeat has been seen within the configured timeout, 5 seconds by default.
 
