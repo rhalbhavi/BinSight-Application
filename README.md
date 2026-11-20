@@ -40,7 +40,8 @@ Its **objectives** are to:
 - The backend validates incoming measurements, stores accepted telemetry, and updates the current bin status.
 - When an ultrasonic reading is invalid, gas and fire readings can still be reported while the backend retains the last valid fill reading.
 <div align="center">
-<img width=auto height="610" alt="image" src="https://github.com/user-attachments/assets/8230ddd5-009b-4d9e-bd3f-8ff417c365b2" />
+    <img width="434" height="522" alt="image" src="https://github.com/user-attachments/assets/9cdd2481-6f24-4ef7-9f7b-67c88fe07d12" />
+    <img width=auto height="610" alt="image" src="https://github.com/user-attachments/assets/8230ddd5-009b-4d9e-bd3f-8ff417c365b2" />
 </div>
 
 ### Battery-Powered Autonomous Operation
