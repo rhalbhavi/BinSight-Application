@@ -148,28 +148,6 @@ The system can help:
 <img width=auto height="600" alt="Screenshot from 2026-11-15 16-14-00" src="https://github.com/user-attachments/assets/8b3ea6b4-052f-45b0-bc3a-dd1886b95a33" />
 </div>
 
-```text
-ESP32 sensors
-    │
-    │ MQTT telemetry and status heartbeat
-    ▼
-Mosquitto MQTT broker
-    │
-    ▼
-FastAPI backend ───── MongoDB
-    │                    ├── bins and zones
-    │                    ├── telemetry history
-    │                    ├── alerts and reports
-    │                    └── worker and administrator data
-    │
-    ▼
-Flutter application
-    ├── Administrator dashboard
-    ├── Worker dashboard
-    ├── Maps and zone views
-    └── Analytics, alerts, tasks, and reports
-```
-
 The ESP32 publishes a telemetry sample at startup and approximately every 2 minutes while connected. It sends a retained connection heartbeat every 2 seconds. The backend considers a device offline when no heartbeat has been seen within the configured timeout, 5 seconds by default.
 
 ----
